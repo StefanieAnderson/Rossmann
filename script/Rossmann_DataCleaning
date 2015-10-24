@@ -4,10 +4,10 @@ Created on Tue Oct 13 00:42:03 2015
 
 @author: Stef
 """
+
 # Standard Imports
 import numpy as np
 import pandas as pd
-
 
 #Visualisation Imports
 import seaborn as sns
@@ -35,42 +35,14 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.grid_search import GridSearchCV
 from sklearn.cross_validation import train_test_split
 
+# Read files and merge them
+train  = pd.read_csv('train.csv')
+train['Date'] = pd.to_datetime(train['Date'])
+train['Year'] = train['Date'].dt.year
+train['Month'] = train['Date'].dt.month
+train['Day'] = train['Date'].dt.day
+store = pd.read_csv('store.csv')
+train_store = pd.DataFrame.merge(train,store,left_on='Store',right_on='Store',how='outer')
 
-
-
-train  = pd.read_csv('../input/train.csv')
-test = pd.read_csv('../input/train.csv')
-Store_Data = pd.read_csv('../input/store.csv')
-
-
-X_train = pd.DataFrame.merge(train, Store_Data, left_on='Store', right_on='Store', how='outer')
-X_test = pd.DataFrame.merge(train, Store_Data, left_on='Store', right_on='Store', how='outer')
-
-y = X_train.Sales
-columns = X_train.columns
-test_ind =X_test.index
-
-#print (train.head())
-#print (train.describe())
-#print (X_train.info())
-#print (Store_Data.info())
-
-
-    ###Seperate Date into several Columns###
-
-Dates = X_train.Date.str.split('-').apply(pd.Series)
-#Dates = int(Dates)
-Dates.columns = ['Year','Month','Day']
-#[int('Year'),int('Month'),int('Day')]
-X_train = pd.concat([X_train, Dates], axis = 1)
-X_train.drop('Date',axis=1, inplace=True)
-        #print (Dates.head())
-#print (X_train.head())
-
-
-Dates = X_test.Date.str.split('-').apply(pd.Series)
-Dates.columns = ['Year','Month','Day']
-X_test = pd.concat([X_test, Dates], axis = 1)
-X_test.drop('Date',axis=1, inplace=True)
-print (Dates.head())
-        #print (X_train.head())
+print(train.info())
+print(train_store.info())
