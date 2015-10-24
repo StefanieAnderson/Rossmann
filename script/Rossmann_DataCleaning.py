@@ -36,12 +36,12 @@ from sklearn.grid_search import GridSearchCV
 from sklearn.cross_validation import train_test_split
 
 # Read files and merge them
-train  = pd.read_csv('train.csv')
+train  = pd.read_csv('../input/train.csv')
 train['Date'] = pd.to_datetime(train['Date'])
 train['Year'] = train['Date'].dt.year
 train['Month'] = train['Date'].dt.month
 train['Day'] = train['Date'].dt.day
-store = pd.read_csv('store.csv')
+store = pd.read_csv('../input/store.csv')
 train_store = pd.DataFrame.merge(train,store,left_on='Store',right_on='Store',how='outer')
 
 print(train.info())
